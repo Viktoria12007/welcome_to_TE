@@ -8,8 +8,11 @@ import styles from './page.module.css';
 import { fetchOnePost } from '@/libs/fetchOnePost';
 
 const ComponentOne = () => {
-    const { data } = useSWR('custom_key_1', fetchOnePost);
-    //...some logic
+    const { data } = useSWR('custom_key_1', fetchOnePost, {
+        onSuccess: (data) => {
+            mutate("custom_key_2", data, false)
+        }
+    });
 
     return data ? (
         <div className={styles.card}>
