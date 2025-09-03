@@ -45,3 +45,21 @@ const BALLONS: { [key: string]: BallonI } = {
 };
 
 // Ваш код здесь
+function getCountAllIsPublic(): Promise<number | void> {
+	const isPublicBallons = Object.values(BALLONS).filter((ballon) => ballon.isPublic);
+
+	const promisesBallonAmount = isPublicBallons.map((isPublicBallon) => {
+		return fetchBallonAmount(isPublicBallon.id);
+	});
+
+	return Promise.all(promisesBallonAmount)
+		.then(
+			(result) => result.reduce((acc, curr) => acc + curr, 0),
+			(error) => console.error(error)
+		)
+		.catch((e) => console.error(e));
+}
+
+(async () => {
+	console.log(await getCountAllIsPublic());
+})();
